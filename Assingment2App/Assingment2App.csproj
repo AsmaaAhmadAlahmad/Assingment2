@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Assingment2_Data\Assingment2_Data.csproj" />
+    <ProjectReference Include="..\Assingment2_Domain\Assingment2_Domain.csproj" />
+  </ItemGroup>
+
+</Project>
