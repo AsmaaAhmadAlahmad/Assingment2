@@ -14,8 +14,8 @@ namespace Assingment2_Domain
         public int Quantity { get; set; }
         public bool IsDeleted { get; set; } = false;
 
-        public List<Car> Cars { get; set; }//لاجل العلاقة مع جدول السيارات
-        public int SupplierId { get; set; }//لاجل العلاقة مع جدول الموردين
-        public Supplier Supplier { get; set; }//لاجل العلاقة مع جدول الموردين
+        public List<Car> Cars { get; set; } = new List<Car>();  // لاجل العلاقة مع جدول السيارات
+        public int SupplierId { get; set; }    // لاجل العلاقة مع جدول الموردين 
+        public Supplier Supplier { get; set; } // لاجل العلاقة مع جدول الموردين
     }
 }

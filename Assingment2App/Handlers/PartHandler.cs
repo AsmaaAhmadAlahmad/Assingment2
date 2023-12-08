@@ -14,15 +14,17 @@ namespace Assingment2_Domain.Handlers
         {
             using (Assingment2Context context = new())
 
-            {
+            {  
+                // جلب القطع الغير محذوفة مع قائمة السيارات التي تتواجد فيها كل قطعة
                 var parts = context.Parts.Where(c => c.IsDeleted == false).Include(x => x.Cars).ToList();
                 if (parts.Any())
                 {
                     foreach (var item in parts)
-                    {
+                    {   // طباعة اسم كل قطعة 
                         Console.WriteLine($"This part is {item.Name}");
                         foreach (var item1 in item.Cars)
-                        {
+                        {  
+                            // طباعة موديل كل سيارة متواجدة فيها هذه القطعة 
                             Console.WriteLine($" The part belongs to this car {item1.Model}");
                         }
                     }
@@ -32,6 +34,9 @@ namespace Assingment2_Domain.Handlers
                     Console.WriteLine("The parts table doesn't has any data!");
             }
         }
+
+
+        // دالة اضافة قطعة
         public void AddParts(Part part)
         {
             using (Assingment2Context context = new())
@@ -41,13 +46,15 @@ namespace Assingment2_Domain.Handlers
                 context.SaveChanges();
             }
         }
+
+
+        // دالة حذف قطعة 
         public void RemoveParts(String name)
         {
             using (Assingment2Context context = new())
-
             {
-                var part = context.Parts.Where(p=>p.IsDeleted!=true)
-                    .FirstOrDefault(p => p.Name == name);
+                // جلب اول قطعة تملك الاسم الذي ادخله المستخدم و غير محذوف مسبقا كحذف ناعم 
+                var part = context.Parts.Where(p=>p.IsDeleted!=true).FirstOrDefault(p => p.Name == name);
                 if (part != null)
                 {
                     part.IsDeleted = true;
@@ -57,16 +64,23 @@ namespace Assingment2_Domain.Handlers
                     Console.WriteLine($"This is no part with this name {name}!");
             }
         }
+
+
+        // دالة تعديل قطعة
+        // حيث يقوم المستخدم بإدخال اسم الخاصية التي يريد تعديلها ثم يدخل القيمة القديمة للخاصية ثم الجديدة
+        // لانه يحوي كل الانواع object لذلك استخدمت النوع   
         public void UpdateParts(object NameProperty, object oldValue, object newValue)
         {
             using (Assingment2Context context = new())
             {
                     string oldValueAsString="";
                     string newValueAsString="";
+                // في حال كانت الخاصية التي ادخلها المستخدم هي اسم القطعة
                 if ((string)NameProperty == "Name" || (string)NameProperty == "name")
                 {
                     try
                     {
+                        // تحويل القيمتين القديمة والجديدة الى النوع سترينغ لان خاصية اسم القطعة نوعها سترينغ
                         oldValueAsString = (string)oldValue;
                         newValueAsString = (string)newValue;
                     }
@@ -76,21 +90,26 @@ namespace Assingment2_Domain.Handlers
                             "and to update the name of a car part ,you must enter string values for " +
                          "the old value and the new value");
                     }
-                    var part = context.Parts.FirstOrDefault(c => c.Name == oldValueAsString);
+                    // جلب اول قطعة تملك الاسم الذي ادخله المستخدم ليتم تعديله
+                    var part = context.Parts.Where(c => c.IsDeleted != true).FirstOrDefault(c => c.Name == oldValueAsString);
                     if (part != null)
                     {
+                        // تعديل اسم القطعة
                         part.Name = newValueAsString;
                         context.SaveChanges();
                     }
-                    else
+                    else // في حال كان الاسم الذي ادخله المستخدم غير موجود
                         Console.WriteLine($"This is no part with this name{oldValueAsString}!");
 
                 }
+
+                // في حال كانت الخاصية التي ادخلها المستخدم هي سعر القطعة
                 else if ((string)NameProperty == "Price" || (string)NameProperty == "price")
                 {
 
                     try
                     {
+                        // تحويل القيمتين القديمة والجديدة الى النوع سترينغ لان خاصية سعر القطعة نوعها سترينغ
                         oldValueAsString = (string)oldValue;
                         newValueAsString = (string)newValue;
                     }
@@ -100,24 +119,30 @@ namespace Assingment2_Domain.Handlers
                             "of a car part,you must enter string values for " +
                          "the old value and the new value");
                     }
-                    var part = context.Parts.FirstOrDefault(p => p.Price == oldValueAsString);
+                    // جلب اول قطعة تملك السعر الذي ادخله المستخدم ليتم تعديله
+                    var part = context.Parts.Where(c => c.IsDeleted != true).FirstOrDefault(p => p.Price == oldValueAsString);
                     if (part != null)
                     {
+                        // تعديل سعر القطعة
                         part.Price = newValueAsString;
                         context.SaveChanges();
 
                     }
-                    else
+                    else // في حال كان السعر الذي ادخله المستخدم غير موجود
                         Console.WriteLine($"This is no part with this price {oldValueAsString}!");
 
                 }
+
+                // Quantity في حال كانت الخاصية التي ادخلها المستخدم هي 
                 else if ((string)NameProperty == "Quantity" || (string)NameProperty == "quantity")
                 {
                     int oldValueAsInt=0;
                     int newValueAsInt=0;
                     try
                     {
-                         oldValueAsInt = (int)oldValue;
+                        // int  تحويل القيمتين القديمة والجديدة الى النوع
+                        //int  نوعها Quantity لان خاصية
+                        oldValueAsInt = (int)oldValue;
                          newValueAsInt = (int)newValue;
                     }
                     catch (Exception) 
@@ -126,18 +151,22 @@ namespace Assingment2_Domain.Handlers
                             "of a car part,you must enter integer values for " +
                          "the old value and the new value");
                     }
-                    var part = context.Parts.FirstOrDefault(p => p.Quantity == oldValueAsInt);
+                    // الذي ادخله المستخدم ليتم تعديله Quantity جلب اول قطعة تملك
+                    var part = context.Parts.Where(c => c.IsDeleted != true).FirstOrDefault(p => p.Quantity == oldValueAsInt);
                     if (part != null)
                     {
                         part.Quantity = newValueAsInt;
                         context.SaveChanges ();
                     }
-                    else
+                    else //Quantity في حال كان 
+                         // الذي ادخله المستخدم غير موجود
                         Console.WriteLine($"This is no parts with this Quantity{oldValueAsInt}!");
 
                 }
-                else    
-                 Console.WriteLine("The property you entered does not exist in the car class, enter an existing property !");
+
+                // في حال ادخل المستخدم اسم خاصية ليست موجودة في خصائص القطع 
+                else
+                    Console.WriteLine("The property you entered does not exist in the car class, enter an existing property !");
 
             }
         }

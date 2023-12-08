@@ -19,6 +19,6 @@ namespace Assingment2_Domain
         public int Age { get; set; }
         public bool IsDeleted { get; set; } = false;
 
-        public List<Sales> Sales { get; set; }//لاجل العلاقة مع المبيعات
+        public List<Sales> Sales { get; set; } = new List<Sales>();  // لاجل العلاقة مع المبيعات
     }
 }

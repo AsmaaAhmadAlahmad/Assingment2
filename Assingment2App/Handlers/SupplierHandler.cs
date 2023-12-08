@@ -7,10 +7,10 @@ namespace Assingment2_Domain.Handlers
         {
             using (Assingment2Context context = new())
             {
-              var suppliers=  context.Suppliers.ToList();
+                // جلب الموردين الغير محذوفين 
+                var suppliers =  context.Suppliers.Where(c => c.IsDeleted == false).ToList();
                 if (suppliers.Any())
                 {
-
                     foreach (var item in suppliers)
                     {
                         Console.WriteLine("The supplier name is" + " " + item.Name);
@@ -22,6 +22,10 @@ namespace Assingment2_Domain.Handlers
                 
             }
         }
+
+
+
+        // دالة اضافة مورد
         public void AddSupplier(Supplier supplier)
         {
             using (Assingment2Context context = new())
@@ -30,17 +34,22 @@ namespace Assingment2_Domain.Handlers
                 context.SaveChanges();
             }
         }
+
+
+
+        // دالة حذف مورد
         public void DeleteSupplier (string name)
         {
             using (Assingment2Context context = new())
             {
+                // جلب اول مورد يملك الاسم الذي ادخله المستخدم و غير محذوف مسبقا كحذف ناعم 
                 var supplier = context.Suppliers.Where(p => p.IsDeleted != true)
                    .FirstOrDefault(s=>s.Name==name);
                 if (supplier != null)
                 {
                     supplier.IsDeleted = true;
-                    //استعلام حتى يتم حذف القطع التي قام بتوريدها هذا الزبون 
-                    //كحذف ناعم
+                    // استعلام حتى يتم جلب القطع التي قام بتوريدها هذا المورد  
+                   //  وحذفها كحذف ناعم 
                     var ThePartProvidedByThisSupplier = context.Parts.Where(
                    p => p.SupplierId == supplier.Id).ToList();
                     foreach (var item in ThePartProvidedByThisSupplier)
@@ -54,17 +63,23 @@ namespace Assingment2_Domain.Handlers
                     Console.WriteLine($"There is no supplier with this name {name}");
             }
         }
+
+
+        // دالة تعديل مورد 
+        // حيث يقوم المستخدم بإدخال اسم الخاصية التي يريد تعديلها ثم يدخل القيمة القديمة للخاصية ثم الجديدة
+        // لانه يحوي كل الانواع object لذلك استخدمت النوع 
         public void UpdateSupplier(object NameProperty, object oldValue, object newValue)
         {
             using (Assingment2Context context = new())
             {
                     string oldValueAsString = "";
                     string newValueAsString = "";
+                // في حال كانت الخاصية التي ادخلها المستخدم هي اسم المورد
                 if ((string)NameProperty == "Name" || (string)NameProperty == "name")
                 {
-
                     try
-                    {
+                    { 
+                        // تحويل القيمتين القديمة والجديدة الى النوع سترينغ لان خاصية اسم المورد نوعها سترينغ
                         oldValueAsString = (string)oldValue;
                         newValueAsString = (string)newValue;
                     }
@@ -74,20 +89,24 @@ namespace Assingment2_Domain.Handlers
                             "and to update the name of a supplier  ,you must enter string values for " +
                          "the old value and the new value");
                     }
-                    var supplier = context.Suppliers.FirstOrDefault(s => s.Name == oldValueAsString);
+                    // جلب اول مورد يملك الاسم الذي ادخله المستخدم ليتم تعديله
+                    var supplier = context.Suppliers.Where(c => c.IsDeleted != true).FirstOrDefault(s => s.Name == oldValueAsString);
                     if (supplier != null)
                     {
+                        // تعديل اسم المورد
                         supplier.Name = newValueAsString;
                         context.SaveChanges();
                     }
-                    else
+                    else // في حال كان الاسم الذي ادخله المستخدم غير موجود
                         Console.WriteLine($"There is no supplier with this name {oldValueAsString}");
                 }
+
+                // في حال كانت الخاصية التي ادخلها المستخدم هي عنوان المورد
                 if ((string)NameProperty == "Address" || (string)NameProperty == "address")
                 {
-
                     try
                     {
+                        // تحويل القيمتين القديمة والجديدة الى النوع سترينغ لان خاصية عنوان المورد نوعها سترينغ
                         oldValueAsString = (string)oldValue;
                         newValueAsString = (string)newValue;
                     }
@@ -97,16 +116,20 @@ namespace Assingment2_Domain.Handlers
                             "and to update the address of a supplier  ,you must enter string values for " +
                          "the old value and the new value");
                     }
-                    var supplier = context.Suppliers.FirstOrDefault(s => s.Address == oldValueAsString);
+                    // جلب اول مورد يملك العنوان الذي ادخله المستخدم ليتم تعديله
+                    var supplier = context.Suppliers.Where(c => c.IsDeleted != true).FirstOrDefault(s => s.Address == oldValueAsString);
                     if (supplier != null)
                     {
+                        // تعديل عنوان المورد
                         supplier.Address = newValueAsString;
                         context.SaveChanges();
                     }
-                    else
+                    else // في حال كان العنوان الذي ادخله المستخدم غير موجود
                         Console.WriteLine($"There is no supplier with this address {oldValueAsString}");
                 }
 
+                else // في حال كان اسم الخاصية التي ادخلها المستخدم ليست من خصائص المورد
+                    Console.WriteLine("The property you entered does not exist in the car class, enter an existing property !");
             }
         }
         

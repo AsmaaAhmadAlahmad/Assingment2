@@ -12,10 +12,10 @@ namespace Assingment2_Domain
         public string Total { get; set; }
         public bool IsDeleted { get; set; } = false;
 
-        public int CustomerId { get; set; }//لاجل العلاقة مع الزبائن
-        public Customer Customers { get; set; }//لاجل العلاقة مع الزبائن
-        public int CarId { get; set; }//لاجل العلاقة مع جدول السيارات
-        public Car Car { get; set; }//لاجل العلاقة مع جدول السيارات
+        public int CustomerId { get; set; }// لاجل العلاقة مع الزبائن
+        public Customer Customers { get; set; }// لاجل العلاقة مع الزبائن
+        public int CarId { get; set; }// لاجل العلاقة مع جدول السيارات
+        public Car Car { get; set; }// لاجل العلاقة مع جدول السيارات
 
     }
 }

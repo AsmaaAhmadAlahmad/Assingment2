@@ -10,8 +10,8 @@
         public double Km { get; set; }
         public bool IsDeleted { get; set; } = false;
 
-        public Sales Sales { get; set; }//لاجل العلاقة مع جدول المبيعات
-        public List<Part> Parts { get; set; }//لاجل العلاقة مع جدول القطع
+        public Sales Sales { get; set; }  // لاجل العلاقة مع جدول المبيعات 
+        public List<Part> Parts { get; set; } = new List<Part>(); // لاجل العلاقة مع جدول القطع
 
     }
 }

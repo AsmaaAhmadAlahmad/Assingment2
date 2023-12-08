@@ -13,6 +13,6 @@ namespace Assingment2_Domain
         public string Address { get; set; }
         public bool IsDeleted { get; set; } = false;
 
-        public List<Part> Parts { get; set; } //لاجل العلاقة مع جدول القطع
+        public List<Part> Parts { get; set; } = new List<Part>(); // لاجل العلاقة مع جدول القطع
     }
 }
